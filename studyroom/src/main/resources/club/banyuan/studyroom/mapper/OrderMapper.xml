@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="club.banyuan.studyroom.mapper.OrderMapper">
+    <resultMap id="orderMap" type="club.banyuan.studyroom.model.Order">
+        <id column="id" jdbcType="INTEGER" property="id"/>
+        <result column="seat_id" jdbcType="INTEGER" property="seatId"/>
+        <result column="user_id" jdbcType="INTEGER" property="userId"/>
+        <result column="state" jdbcType="TINYINT" property="state"/>
+        <result column="order_date" jdbcType="VARCHAR" property="orderDate"/>
+        <result column="order_hour" jdbcType="INTEGER" property="orderHour"/>
+        <result column="created_at" jdbcType="TIMESTAMP" property="createdAt"/>
+        <result column="updated_at" jdbcType="TIMESTAMP" property="updatedAt"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+        id, seat_id, user_id,order_date,order_hour, state, created_at, updated_at
+    </sql>
+    <select id="listOrder" resultMap="orderMap">
+        select
+        <include refid="Base_Column_List"/>
+        from roomorder
+    </select>
+    <select id="queryOrderBySeatId" resultMap="orderMap">
+        select
+        <include refid="Base_Column_List"/>
+        from roomorder
+        where
+        seat_id = #{seatId}
+    </select>
+    <select id="queryOrderById" resultMap="orderMap">
+        select
+        <include refid="Base_Column_List"/>
+        from roomorder
+        where
+        id = #{orderId}
+    </select>
+    <select id="queryReservedOrder" resultMap="orderMap">
+        select
+        <include refid="Base_Column_List"/>
+        from roomorder
+        where
+        seat_id = #{order.seatId} and
+        order_date = #{order.orderDate} and
+        order_hour = #{order.orderHour} and
+        state = #{order.state}
+    </select>
+
+    <insert id="addOrder" parameterType="club.banyuan.studyroom.model.Order">
+        insert into roomorder
+        (seat_id, user_id, order_date,order_hour ,state)
+        values
+        (#{order.seatId,jdbcType=INTEGER},
+        #{order.userId,jdbcType=INTEGER},
+        #{order.orderDate,jdbcType=VARCHAR},
+        #{order.orderHour,jdbcType=INTEGER},
+        #{order.state,jdbcType=TINYINT})
+    </insert>
+    <update id="updateOrder" parameterType="club.banyuan.studyroom.model.Order">
+        update roomorder
+        set
+        seat_id=#{order.seatId,jdbcType=INTEGER},
+        user_id= #{order.userId,jdbcType=INTEGER},
+        order_date= #{order.orderDate,jdbcType=VARCHAR},
+        order_hour=#{order.orderHour,jdbcType=INTEGER},
+        state= #{order.state,jdbcType=TINYINT}
+        where
+        id =#{order.id,jdbcType=INTEGER}
+    </update>
+    <delete id="deleteOrder">
+        delete from roomorder
+        where
+        id =#{orderId}
+    </delete>
+</mapper>

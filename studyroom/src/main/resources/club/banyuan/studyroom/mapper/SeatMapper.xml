@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="club.banyuan.studyroom.mapper.SeatMapper">
+    <resultMap id="seatMap" type="club.banyuan.studyroom.model.Seat">
+        <id column="id" jdbcType="INTEGER" property="id"/>
+        <result column="about" jdbcType="TINYINT" property="about"/>
+        <result column="repair" jdbcType="TINYINT" property="repair"/>
+        <result column="created_at" jdbcType="TIMESTAMP" property="createdAt"/>
+        <result column="updated_at" jdbcType="TIMESTAMP" property="updatedAt"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+        id ,about, repair, created_at, updated_at
+    </sql>
+    <select id="listSeat" resultMap="seatMap">
+        select
+        <include refid="Base_Column_List"/>
+        from seat
+    </select>
+    <select id="querySeatById" resultMap="seatMap">
+        select
+        <include refid="Base_Column_List"/>
+        from seat
+        where
+        id = #{seatId}
+    </select>
+    <insert id="addSeat" parameterType="club.banyuan.studyroom.model.Seat">
+        insert into seat
+        (about,repair)
+        values
+        (#{seat.about,jdbcType=TINYINT},
+        #{seat.repair,jdbcType=TINYINT})
+    </insert>
+    <update id="updateSeat" parameterType="club.banyuan.studyroom.model.Seat">
+        update seat
+        set
+        about=#{seat.about,jdbcType=TINYINT},
+        repair=#{seat.repair,jdbcType=TINYINT}
+        where
+        id =#{seat.id,jdbcType=INTEGER}
+    </update>
+    <delete id="deleteSeat">
+        delete from seat
+        where
+        id =#{seatId}
+    </delete>
+
+</mapper>
